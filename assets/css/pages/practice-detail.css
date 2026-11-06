@@ -1,0 +1,129 @@
+.practice-detail {
+  min-height: 60vh;
+  background: #E8EEF0;
+  padding-block: 22px 68px;
+}
+
+.practice-detail__utilities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  padding: 6px 12px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color var(--transition-standard), border-color var(--transition-standard), background-color var(--transition-standard), transform var(--transition-standard);
+}
+
+.btn-back:hover {
+  border-color: var(--color-accent-hover);
+  background: var(--color-accent-hover);
+  color: #FFFFFF;
+}
+
+.btn-back:active {
+  transform: translateY(1px);
+}
+
+.practice-detail__breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.practice-detail__breadcrumbs a {
+  color: var(--color-accent);
+  transition: color var(--transition-standard);
+}
+
+.practice-detail__breadcrumbs a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.practice-detail__breadcrumbs li:last-child {
+  color: var(--color-heading);
+}
+
+.practice-detail__article {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  padding: clamp(22px, 4vw, 42px);
+}
+
+.practice-detail__header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 20px;
+}
+
+.practice-detail__header h1 {
+  color: var(--color-heading);
+  font-size: clamp(28px, 3.5vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.practice-detail__header > p {
+  margin-top: 10px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.practice-detail__content {
+  display: grid;
+  gap: 18px;
+  padding-block: 22px 26px;
+}
+
+.practice-detail__content p {
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.btn-call-action {
+  min-height: 44px;
+  border-radius: 999px;
+  font-size: 15px;
+}
+
+.phone-icon {
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .practice-detail {
+    padding-block: 16px 48px;
+  }
+
+  .practice-detail__utilities {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .practice-detail__article {
+    padding: 20px;
+  }
+}
