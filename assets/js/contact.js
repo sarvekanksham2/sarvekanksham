@@ -117,10 +117,10 @@
       if (errorMessage instanceof HTMLElement) errorMessage.hidden = true;
 
       try {
-        const response = await fetch(new URL(form.getAttribute("action") || window.location.pathname, window.location.origin), {
+        const response = await fetch(new URL(form.getAttribute("action") || "/", window.location.origin), {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(new FormData(form)),
+          body: new URLSearchParams(new FormData(form)).toString(),
         });
 
         if (!response.ok) {
