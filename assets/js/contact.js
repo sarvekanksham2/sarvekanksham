@@ -7,6 +7,7 @@
   if (form instanceof HTMLFormElement) {
     const successMessage = document.querySelector("[data-form-success]");
     const errorMessage = form.querySelector("[data-form-error]");
+    const errorText = form.querySelector("[data-form-error-message]");
     const pendingMessage = form.querySelector("[data-form-pending]");
     form.noValidate = true;
 
@@ -96,6 +97,14 @@
       }
 
       event.preventDefault();
+      if (window.location.protocol === "file:") {
+        if (errorText instanceof HTMLElement) {
+          errorText.textContent = "This form can only send requests from the live website";
+        }
+        if (errorMessage instanceof HTMLElement) errorMessage.hidden = false;
+        return;
+      }
+
       const submitButton = form.querySelector('button[type="submit"]');
       if (!(submitButton instanceof HTMLButtonElement)) {
         console.error("Unable to submit the consultation request: submit button was not found.");
@@ -108,7 +117,7 @@
       if (errorMessage instanceof HTMLElement) errorMessage.hidden = true;
 
       try {
-        const response = await fetch(form.action, {
+        const response = await fetch(new URL(form.getAttribute("action") || window.location.pathname, window.location.origin), {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams(new FormData(form)),

@@ -7,7 +7,9 @@ This site is a static website deployed from the repository root. The production 
 1. Push the site source to a private or public GitHub repository as appropriate.
 2. In Netlify, import that repository. `netlify.toml` sets the publish directory to the repository root; no build command is needed.
 3. Add `sarvekanksham.com` as the production domain in Netlify and configure DNS as Netlify instructs. Enable HTTPS and select the `www` or apex domain as the primary domain consistently. If the primary host changes, update every canonical, structured-data URL, Open Graph URL, `robots.txt`, and sitemap URL to match.
-4. Submit a test consultation form from the deployed site and confirm the submission appears in Netlify Forms. Configure form notification recipients in Netlify; the HTML form does not embed an email provider or secret.
+4. In the Netlify site dashboard, open **Site configuration** → **Notifications** → **Emails and webhooks** (or **Forms** → **Form notifications**, depending on the dashboard version). Add an **Email notification**, choose the `consultation-request` form, and set the recipient to `sarvekankshamassociates@gmail.com`. Save the notification. A `data-netlify` form stores submissions in Netlify, but does not send email to this address until this notification is configured.
+5. Submit a test consultation from the deployed HTTPS website and confirm it appears under **Forms** and an email notification arrives. Use dummy details for testing. Do not test by opening `contact.html` directly as a `file://` URL; there is no form backend on the local filesystem.
+6. Configure any additional notification recipients and form-retention settings in Netlify according to the firm's privacy and data-handling practices.
 5. Test the Maps iframe after deployment. The Netlify `_headers` Content Security Policy permits only the Google Maps frame hosts used by the contact page.
 
 ## Google Search Console
