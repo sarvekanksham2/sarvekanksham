@@ -11,30 +11,6 @@
     var(--color-cream);
 }
 
-.about-breadcrumbs {
-  padding-top: 24px;
-}
-
-.about-breadcrumbs ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  list-style: none;
-  color: var(--color-text);
-  font-size: 14px;
-}
-
-.about-breadcrumbs li + li::before {
-  margin-right: 10px;
-  color: var(--color-accent);
-  content: "/";
-}
-
-.about-breadcrumbs a {
-  color: var(--color-accent);
-}
-
 .about-hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);

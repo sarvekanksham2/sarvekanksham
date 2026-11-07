@@ -142,7 +142,11 @@
         const response = await fetch(new URL(form.getAttribute("action") || "/", window.location.origin), {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(new FormData(form)).toString(),
+          body: (() => {
+            const formData = new FormData(form);
+            formData.set("form-name", form.name);
+            return new URLSearchParams(formData).toString();
+          })(),
         });
 
         if (response.status === 404) {
