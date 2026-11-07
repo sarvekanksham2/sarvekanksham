@@ -305,6 +305,16 @@ a.contact-information__value:hover {
   margin-top: 26px;
 }
 
+.consultation-submit:disabled {
+  background: #A7B3B7;
+  color: #FFFFFF;
+  cursor: not-allowed;
+}
+
+.consultation-submit:disabled:hover {
+  background: #A7B3B7;
+}
+
 .consultation-submit span {
   font-size: 18px;
 }

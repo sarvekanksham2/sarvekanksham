@@ -14,7 +14,21 @@
     const controls = [...form.querySelectorAll("input, select, textarea")]
       .filter((control) => control.name !== "form-name" && control.name !== "bot-field");
     const phone = form.querySelector("#phone-number");
+    const consent = form.querySelector("#bci-consent");
+    const submitButton = form.querySelector('button[type="submit"]');
     const phonePattern = /^[6-9]\d{9}$/;
+    let isSubmitting = false;
+
+    if (consent instanceof HTMLInputElement && submitButton instanceof HTMLButtonElement) {
+      const updateSubmitState = () => {
+        submitButton.disabled = !consent.checked || isSubmitting;
+      };
+
+      consent.addEventListener("change", updateSubmitState);
+      updateSubmitState();
+    } else {
+      console.error("Unable to control the consultation submit button: consent checkbox or submit button was not found.");
+    }
 
     function normalizeText(control) {
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement)) return;
@@ -77,6 +91,12 @@
 
       control.addEventListener(eventName, () => {
         control.dataset.touched = "true";
+        if (control === consent && control instanceof HTMLInputElement && !control.checked) {
+          control.setAttribute("aria-invalid", "false");
+          const error = form.querySelector(`[data-error-for="${control.name}"]`);
+          if (error instanceof HTMLElement) error.textContent = "";
+          return;
+        }
         validateControl(control);
       });
     });
@@ -91,7 +111,6 @@
       const firstInvalid = invalidControls[0];
       if (firstInvalid) {
         event.preventDefault();
-        form.reportValidity();
         firstInvalid.focus();
         return;
       }
@@ -105,16 +124,19 @@
         return;
       }
 
-      const submitButton = form.querySelector('button[type="submit"]');
       if (!(submitButton instanceof HTMLButtonElement)) {
         console.error("Unable to submit the consultation request: submit button was not found.");
         return;
       }
 
+      isSubmitting = true;
       submitButton.disabled = true;
       form.setAttribute("aria-busy", "true");
       if (pendingMessage instanceof HTMLElement) pendingMessage.hidden = false;
       if (errorMessage instanceof HTMLElement) errorMessage.hidden = true;
+      if (errorText instanceof HTMLElement) {
+        errorText.textContent = "Your request could not be sent. Please try again";
+      }
 
       try {
         const response = await fetch(new URL(form.getAttribute("action") || "/", window.location.origin), {
@@ -123,8 +145,17 @@
           body: new URLSearchParams(new FormData(form)).toString(),
         });
 
+        if (response.status === 404) {
+          throw new Error("Netlify returned 404 for the form submission endpoint.");
+        }
+
         if (!response.ok) {
           throw new Error(`Consultation request returned HTTP ${response.status}.`);
+        }
+
+        const responseBody = await response.text();
+        if (/form not found|not found|404|page not found/i.test(responseBody)) {
+          throw new Error("Netlify did not recognize the consultation form. Confirm form detection is enabled and redeploy.");
         }
 
         if (!(successMessage instanceof HTMLElement)) {
@@ -136,9 +167,17 @@
         successMessage.focus();
       } catch (error) {
         console.error("Consultation request submission failed.", error);
+        if (errorText instanceof HTMLElement) {
+          errorText.textContent = error instanceof Error && error.message.includes("form submission endpoint")
+            ? "Our form service is not accepting requests right now. Please try again later"
+            : "Your request could not be sent. Please try again";
+        }
         if (errorMessage instanceof HTMLElement) errorMessage.hidden = false;
       } finally {
-        submitButton.disabled = false;
+        isSubmitting = false;
+        if (consent instanceof HTMLInputElement) {
+          submitButton.disabled = !consent.checked;
+        }
         form.removeAttribute("aria-busy");
         if (pendingMessage instanceof HTMLElement) pendingMessage.hidden = true;
       }

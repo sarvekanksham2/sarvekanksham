@@ -12,6 +12,8 @@ This site is a static website deployed from the repository root. The production 
 6. Configure any additional notification recipients and form-retention settings in Netlify according to the firm's privacy and data-handling practices.
 7. Test the Maps iframe after deployment. The Netlify `_headers` Content Security Policy permits only the Google Maps frame hosts used by the contact page.
 
+If a valid form submission returns HTTP 404, Netlify has not installed a handler for this form on the published deploy. Confirm form detection is enabled, then trigger a fresh production deploy after enabling it. Check the newest published deploy—not just whether a form name appears in the dashboard—and submit a dummy test again. The consultation form uses URL-encoded AJAX POST to `/`, as required by Netlify's static form AJAX pattern.
+
 ## Google Search Console
 
 1. Add and verify a **Domain property** for `sarvekanksham.com` in Google Search Console using the DNS TXT record supplied by Google. Add the record at the authoritative DNS provider, then use Google's verification flow. DNS verification does not require placing a secret in the public repository.
